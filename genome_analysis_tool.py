@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import argparse
 from collections import Counter
 
-
-
 parser = argparse.ArgumentParser(description= "Input a fasta file for analysis")
 
 parser.add_argument('--file', metavar='FILE', type=str, help="Genome data file")
@@ -15,6 +13,7 @@ parser.add_argument('--name', metavar='NAME', type=str, help="Name of the entity
 parser.add_argument('--genetics', metavar='DNA or RNA', type=str, choices=['dna','rna'], help="Indicate whether this is a DNA or RNA sample  " )
 parser.add_argument('--sense', metavar='+/-', type=str, choices=['+','-'], help="This indicates whether the RNA is a positive or negative")
 parser.add_argument('--protein_length', metavar="Protein length", default=50, type=int,help="Minimum amino acid sequence that codes for protein")
+parser.add_argument('--save', metavar='file of report', type=str)
 
 args = parser.parse_args()
 
@@ -90,6 +89,8 @@ if args.type == 'fasta' or args.type == 'gb':
         # plt.plot()
         # plt.show()
 
+        if args.save:
+            pass
 
     if args.genetics.lower() == 'rna':
         RNA = data.seq
