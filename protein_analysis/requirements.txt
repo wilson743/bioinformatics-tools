@@ -4,3 +4,4 @@ pandas
 stmol
 py3Dmol
 requests
+ipython_genutils
