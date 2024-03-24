@@ -1,0 +1,7 @@
+streamlit
+Biopython
+collections
+datetime
+pandas
+os
+tempfile

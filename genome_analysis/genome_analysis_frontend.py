@@ -1,12 +1,15 @@
 import streamlit as st
 from Bio import SeqIO
 from Bio.SeqUtils import molecular_weight, GC123
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from collections import Counter
 from datetime import datetime
-from pathlib import Path
+# from pathlib import Path
 import pandas as pd
+import os
+import tempfile
 
+fileName = ''
 
 now = datetime.now()
 st.title("Genome Analysis Tool")
@@ -14,7 +17,14 @@ st.subheader(f"""
     Report Section:  {now.strftime("%d/%m/%Y %H:%M:%S")}
 """)
 st.sidebar.subheader("Parameter Tuning Section")
-filename = st.sidebar.file_uploader("Upload a sequence file")
+uploaded_file = st.sidebar.file_uploader("Upload a sequence file")
+if uploaded_file:
+    temp_dir = tempfile.mkdtemp()
+    fileName = os.path.join(temp_dir, uploaded_file.name)
+    with open(fileName, "wb") as f:
+         f.write(uploaded_file.getvalue())
+
+
 entity_name = st.sidebar.text_input("Enter descriptive name for entity being studied")
 filetype = st.sidebar.selectbox("Select file type",['Fasta','gb'])
 genotype = st.sidebar.selectbox("Select genotype",['DNA','RNA'])
@@ -22,12 +32,13 @@ protein_length = st.sidebar.slider("Minimum protein length",min_value=0, max_val
 # report = st.sidebar.checkbox("Generate report")
 analyse = st.sidebar.button('Begin Analysis',help="Click to begin the anaylsis")
 
-def action(filetype,filename,genotype,entity_name,protein_length):
-    p = Path(filename.name).resolve()
+def action(filetype,fileName,genotype,entity_name,protein_length):
 
+    #
+    # st.write(fileName)
     # st.write(str(p))
     if filetype == 'Fasta' or filetype == 'gb':
-        data = SeqIO.read(str(p),filetype.lower())
+        data = SeqIO.read(fileName,filetype.lower())
 
         if genotype.upper() == 'DNA':
             DNA = data.seq
@@ -98,4 +109,4 @@ def action(filetype,filename,genotype,entity_name,protein_length):
 
 
 if analyse:
-    action(filetype,filename,genotype,entity_name,int(protein_length))
+    action(filetype,fileName,genotype,entity_name,int(protein_length))
