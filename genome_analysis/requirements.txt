@@ -5,3 +5,4 @@ datetime
 pandas
 os
 tempfile
+ipython_genutils
